@@ -29,7 +29,7 @@ EOF
 #######################################
 system_git_clone() {
   print_banner
-  printf "${WHITE} 💻 Fazendo download do código AtendeChat...${GRAY_LIGHT}"
+  printf "${WHITE} 💻 Fazendo download do código BoraChat...${GRAY_LIGHT}"
   printf "\n\n"
 
 
@@ -49,7 +49,7 @@ EOF
 #######################################
 system_update() {
   print_banner
-  printf "${WHITE} 💻 Vamos atualizar o sistema AtendeChat...${GRAY_LIGHT}"
+  printf "${WHITE} 💻 Vamos atualizar o sistema BoraChat...${GRAY_LIGHT}"
   printf "\n\n"
 
   sleep 2
@@ -71,7 +71,7 @@ EOF
 #######################################
 deletar_tudo() {
   print_banner
-  printf "${WHITE} 💻 Vamos deletar o AtendeChat...${GRAY_LIGHT}"
+  printf "${WHITE} 💻 Vamos deletar o BoraChat...${GRAY_LIGHT}"
   printf "\n\n"
 
   sleep 2
@@ -89,6 +89,13 @@ deletar_tudo() {
   dropuser ${empresa_delete}
   dropdb ${empresa_delete}
   exit
+EOF
+
+  sleep 2
+
+  sudo su - deploy <<EOF
+  docker stop redis-${empresa_delete}
+  docker rm redis-${empresa_delete}
 EOF
 
 sleep 2
@@ -117,7 +124,7 @@ EOF
 #######################################
 configurar_bloqueio() {
   print_banner
-  printf "${WHITE} 💻 Vamos bloquear o AtendeChat...${GRAY_LIGHT}"
+  printf "${WHITE} 💻 Vamos bloquear o BoraChat...${GRAY_LIGHT}"
   printf "\n\n"
 
   sleep 2
@@ -144,7 +151,7 @@ EOF
 #######################################
 configurar_desbloqueio() {
   print_banner
-  printf "${WHITE} 💻 Vamos Desbloquear o AtendeChat...${GRAY_LIGHT}"
+  printf "${WHITE} 💻 Vamos Desbloquear o BoraChat...${GRAY_LIGHT}"
   printf "\n\n"
 
   sleep 2
@@ -170,7 +177,7 @@ EOF
 #######################################
 configurar_dominio() {
   print_banner
-  printf "${WHITE} 💻 Vamos Alterar os Dominios do AtendeChat...${GRAY_LIGHT}"
+  printf "${WHITE} 💻 Vamos Alterar os Dominios do BoraChat...${GRAY_LIGHT}"
   printf "\n\n"
 
 sleep 2
@@ -281,7 +288,7 @@ system_node_install() {
   sleep 2
 
   sudo su - root <<EOF
-  curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+  curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
   apt-get install -y nodejs
   sleep 2
   npm install -g npm@latest
@@ -405,6 +412,11 @@ system_pm2_install() {
   sudo su - root <<EOF
   npm install -g pm2
 
+EOF
+
+  sudo su - root <<EOF
+   pm2 startup
+  sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u deploy --hp /home/deploy
 EOF
 
   sleep 2
